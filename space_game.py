@@ -11,7 +11,7 @@ from stars_animation import blink
 def draw(canvas, tic_timeout, frame1, frame2):
     coord_y, coord_x = canvas.getmaxyx()
     spaceship_y = coord_y // 2
-    spaceship_x = coord_x // 2 + 2
+    spaceship_x = coord_x // 2
 
     initial_character_spacing = 1
     end_character_spacing = 4
