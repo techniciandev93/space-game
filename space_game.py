@@ -37,17 +37,17 @@ def draw(canvas, tic_timeout, frame1, frame2):
 
     coroutines.append(fire(canvas, spaceship_y, spaceship_x+shot_adjustment_x))
 
-    animate_spaceship_iterator = cycle([frame1, frame2])
+    animate_spaceship_iterator = cycle([frame1, frame1, frame2, frame2])
     coroutines.append(animate_spaceship(animate_spaceship_iterator, canvas, spaceship_y, spaceship_x, coord_y, coord_x))
 
     while True:
         for coroutine in coroutines.copy():
             try:
                 coroutine.send(None)
-                canvas.refresh()
-                curses.curs_set(False)
             except StopIteration:
                 coroutines.remove(coroutine)
+        canvas.refresh()
+        curses.curs_set(False)
         time.sleep(tic_timeout)
 
 
