@@ -3,8 +3,8 @@ import curses
 import random
 from itertools import cycle
 
-from fire_animation import fire
 from fly_garbage_animation import fill_orbit_with_garbage
+from game_scenario import display_year, increase_year
 from spaceship_animation import animate_spaceship
 from stars_animation import blink
 
@@ -36,14 +36,14 @@ def draw(canvas, tic_timeout, frame1, frame2, trash_large_frame, trash_small_fra
             offset_tics = random.randint(1, 3)
             coroutines.append(blink(canvas, y, x, offset_tics, simbol))
 
-    coroutines.append(fire(canvas, spaceship_y, spaceship_x + shot_adjustment_x))
-
     animate_spaceship_iterator = cycle([frame1, frame1, frame2, frame2])
     coroutines.append(animate_spaceship(animate_spaceship_iterator, canvas, spaceship_y, spaceship_x, coord_y,
                                         coord_x, shot_adjustment_x, coroutines))
 
     coroutines.append(fill_orbit_with_garbage(canvas, coord_x, coroutines,
                                               [trash_large_frame, trash_small_frame, trash_xl_frame]))
+    coroutines.append(increase_year())
+    coroutines.append(display_year(canvas, coord_x))
 
     while True:
         for coroutine in coroutines.copy():
