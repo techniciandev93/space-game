@@ -9,7 +9,8 @@ from spaceship_animation import animate_spaceship
 from stars_animation import blink
 
 
-def draw(canvas, tic_timeout, frame1, frame2, trash_large_frame, trash_small_frame, trash_xl_frame):
+def draw(canvas, tic_timeout, frame1, frame2, trash_large_frame, trash_small_frame, trash_xl_frame, duck_frame,
+         hubble_frame, lamp_frame):
     coord_y, coord_x = canvas.getmaxyx()
     spaceship_y = coord_y // 2
     spaceship_x = coord_x // 2
@@ -41,7 +42,8 @@ def draw(canvas, tic_timeout, frame1, frame2, trash_large_frame, trash_small_fra
                                         coord_x, shot_adjustment_x, coroutines))
 
     coroutines.append(fill_orbit_with_garbage(canvas, coord_x, coroutines,
-                                              [trash_large_frame, trash_small_frame, trash_xl_frame]))
+                                              [trash_large_frame, trash_small_frame, trash_xl_frame,
+                                               duck_frame, hubble_frame, lamp_frame]))
     coroutines.append(increase_year())
     coroutines.append(display_year(canvas, coord_x))
 
@@ -69,12 +71,20 @@ if __name__ == '__main__':
     trash_small_path = 'animation_frames/trash_small.txt'
     trash_xl_path = 'animation_frames/trash_xl.txt'
 
+    duck_path = 'animation_frames/duck.txt'
+    hubble_path = 'animation_frames/hubble.txt'
+    lamp_path = 'animation_frames/lamp.txt'
+
     rocket_frame_one = read_file(rocket_frame_path_1)
     rocket_frame_two = read_file(rocket_frame_path_2)
 
     trash_large_frame = read_file(trash_large_path)
     trash_small_frame = read_file(trash_small_path)
     trash_xl_frame = read_file(trash_xl_path)
+
+    duck_frame = read_file(duck_path)
+    hubble_frame = read_file(hubble_path)
+    lamp_frame = read_file(lamp_path)
 
     tic_timeout = 0.1
     curses.update_lines_cols()
@@ -83,4 +93,7 @@ if __name__ == '__main__':
                    rocket_frame_two,
                    trash_large_frame,
                    trash_small_frame,
-                   trash_xl_frame)
+                   trash_xl_frame,
+                   duck_frame,
+                   hubble_frame,
+                   lamp_frame)

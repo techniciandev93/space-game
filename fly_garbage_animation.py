@@ -1,4 +1,3 @@
-import asyncio
 import random
 
 from async_sleep import sleep
@@ -32,7 +31,7 @@ async def fly_garbage(canvas, column, garbage_frame, speed=0.5):
                 return
 
             draw_frame(canvas, row, column, garbage_frame)
-            await asyncio.sleep(0)
+            await sleep()
             draw_frame(canvas, row, column, garbage_frame, negative=True)
             row += speed
             new_obstacle.row = row

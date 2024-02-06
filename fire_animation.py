@@ -4,7 +4,7 @@ from async_sleep import sleep
 from fly_garbage_animation import obstacles, obstacles_in_last_collisions
 
 
-async def fire(canvas, start_row, start_column, rows_speed=-0.2, columns_speed=0):
+async def fire(canvas, start_row, start_column, rows_speed=-0.4, columns_speed=0):
     """Display animation of gun shot, direction and speed can be specified."""
 
     row, column = start_row, start_column

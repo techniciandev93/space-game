@@ -17,6 +17,11 @@ PHRASES = {
 YEAR = 1957
 
 
+def get_year():
+    global YEAR
+    return YEAR
+
+
 def get_garbage_delay_tics():
     if YEAR < 1961:
         return None
@@ -36,15 +41,17 @@ def get_garbage_delay_tics():
 
 async def display_year(canvas, width_window):
     global YEAR, PHRASES
-    len_year_string = 60
     phrase = ''
-    derwin = canvas.derwin(1, len_year_string, 0, width_window - len_year_string)
+
+    table_height = 3
+    table_win = canvas.derwin(table_height, width_window, canvas.getmaxyx()[0] - table_height, 0)
+
     while True:
         if YEAR in PHRASES.keys():
             phrase = PHRASES[YEAR]
-        derwin.clear()
-        derwin.addstr(0, 0, f'YEAR {YEAR} | {phrase}', curses.A_BOLD)
-        derwin.refresh()
+        table_win.clear()
+        table_win.addstr(1, 1, f'YEAR {YEAR} | {phrase}', curses.A_BOLD)
+        table_win.refresh()
         await sleep()
 
 

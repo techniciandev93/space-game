@@ -3,7 +3,7 @@ from explosion import explode
 from fire_animation import fire
 from fly_garbage_animation import obstacles
 from game_animation import read_controls, get_frame_size, draw_frame
-from game_scenario import YEAR
+from game_scenario import get_year
 from physics import update_speed
 
 
@@ -20,9 +20,6 @@ async def animate_spaceship(animate_spaceship_iterator, canvas, row, column, max
                 coroutines.append(show_gameover(canvas, max_coord_y, max_coord_x))
                 return
 
-        if space_pressed and YEAR >= 2020:
-            coroutines.append(fire(canvas, row, column + 2))
-
         row_speed, column_speed = update_speed(row_speed, column_speed, rows_direction, columns_direction)
         row += row_speed
         column += column_speed
@@ -30,9 +27,9 @@ async def animate_spaceship(animate_spaceship_iterator, canvas, row, column, max
         row = max(0, min(row, max_coord_y - frame_rows))
         column = max(0, min(column, max_coord_x - frame_columns))
 
-        if space_pressed:
+        year = get_year()
+        if space_pressed and year >= 2020:
             coroutines.append(fire(canvas, row, column + shot_adjustment_x))
-            await sleep()
 
         draw_frame(canvas, round(row), round(column), frame)
         await sleep()
