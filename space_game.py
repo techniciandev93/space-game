@@ -2,6 +2,8 @@ import time
 import curses
 import random
 from itertools import cycle
+from os import listdir
+from os.path import isfile, join
 
 from fly_garbage_animation import fill_orbit_with_garbage
 from game_scenario import display_year, increase_year
@@ -9,8 +11,7 @@ from spaceship_animation import animate_spaceship
 from stars_animation import blink
 
 
-def draw(canvas, tic_timeout, frame1, frame2, trash_large_frame, trash_small_frame, trash_xl_frame, duck_frame,
-         hubble_frame, lamp_frame):
+def draw(canvas, tic_timeout, frame1, frame2, garbage_frames):
     coord_y, coord_x = canvas.getmaxyx()
     spaceship_y = coord_y // 2
     spaceship_x = coord_x // 2
@@ -41,9 +42,7 @@ def draw(canvas, tic_timeout, frame1, frame2, trash_large_frame, trash_small_fra
     coroutines.append(animate_spaceship(animate_spaceship_iterator, canvas, spaceship_y, spaceship_x, coord_y,
                                         coord_x, shot_adjustment_x, coroutines))
 
-    coroutines.append(fill_orbit_with_garbage(canvas, coord_x, coroutines,
-                                              [trash_large_frame, trash_small_frame, trash_xl_frame,
-                                               duck_frame, hubble_frame, lamp_frame]))
+    coroutines.append(fill_orbit_with_garbage(canvas, coord_x, coroutines, garbage_frames))
     coroutines.append(increase_year())
     coroutines.append(display_year(canvas, coord_x))
 
@@ -64,36 +63,23 @@ def read_file(path):
 
 
 if __name__ == '__main__':
+    garbage_path = 'animation_frames/garbage/'
+    garbage_frames = []
+
+    for file in listdir(garbage_path):
+        file_full_path = join(garbage_path, file)
+        if isfile(file_full_path):
+            file_frame = read_file(file_full_path)
+            garbage_frames.append(file_frame)
+
     rocket_frame_path_1 = 'animation_frames/rocket_frame_1.txt'
     rocket_frame_path_2 = 'animation_frames/rocket_frame_2.txt'
-
-    trash_large_path = 'animation_frames/trash_large.txt'
-    trash_small_path = 'animation_frames/trash_small.txt'
-    trash_xl_path = 'animation_frames/trash_xl.txt'
-
-    duck_path = 'animation_frames/duck.txt'
-    hubble_path = 'animation_frames/hubble.txt'
-    lamp_path = 'animation_frames/lamp.txt'
-
     rocket_frame_one = read_file(rocket_frame_path_1)
     rocket_frame_two = read_file(rocket_frame_path_2)
-
-    trash_large_frame = read_file(trash_large_path)
-    trash_small_frame = read_file(trash_small_path)
-    trash_xl_frame = read_file(trash_xl_path)
-
-    duck_frame = read_file(duck_path)
-    hubble_frame = read_file(hubble_path)
-    lamp_frame = read_file(lamp_path)
 
     tic_timeout = 0.1
     curses.update_lines_cols()
     curses.wrapper(draw, tic_timeout,
                    rocket_frame_one,
                    rocket_frame_two,
-                   trash_large_frame,
-                   trash_small_frame,
-                   trash_xl_frame,
-                   duck_frame,
-                   hubble_frame,
-                   lamp_frame)
+                   garbage_frames)
